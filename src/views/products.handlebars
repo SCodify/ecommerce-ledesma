@@ -1,0 +1,61 @@
+<h1>Test products</h1>
+
+<h3>Formulario de productos</h3>
+<form action="api/products" method="post">
+    <label> 
+        title:
+        <input type="text" name="title"> 
+    </label>
+    <label>
+        description:
+        <input type="text" name="description">
+    </label>
+    <label>
+        price:
+        <input type="number" name="price">
+    </label>
+    <label>
+        thumbnail:
+        <input type="text" name="thumbnail">
+    </label>
+    <label>
+        code:
+        <input type="text" name="code">
+    </label>
+    <label>
+        stock:
+        <input type="number" name="stock">
+    </label>
+
+    <label>
+        thumbnail:
+        <input type="file" name="image">
+    </label>
+
+    <input type="submit">
+</form>
+
+<script src="/js/index.js"></script>
+
+<!-- La lógica de este formujalrio se encuentra en /public/js/users.js
+Si no se especifica un método hay que hacerlo por medio de JS
+
+<form id="createForm">
+    <label> 
+        nombre:
+        <input type="text" name="nombre"> 
+    </label>
+    <label>
+        correo:
+        <input type="text" name="correo">
+    </label>
+    <label>
+        password:
+        <input type="number" name="password">
+    </label>
+
+    <input type="submit">
+</form>
+
+<script src="/js/users.js"></script>
+-->
