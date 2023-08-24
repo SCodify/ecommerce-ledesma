@@ -15,8 +15,8 @@ const router = Router()
 router.get('/', async (req, res) =>{
     // const { limit } = req.body
     // res.json({message: products})
-    res.render('products.handlebars', { // El paso 5 opcional me permite no tener que poner la extensión .handlebars
-        style: 'products' // Paso 8 agrego nombre del archivo estático .css que se reemplazará en el main.handelbars
+    res.render('products.handlebars', { 
+        style: 'products' 
     })
 })
 
