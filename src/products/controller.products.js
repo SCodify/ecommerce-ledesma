@@ -6,9 +6,9 @@ const products = require('../db/products')
 
 const uploader = require('../utils/multer') // Sirve para cargar archivos
 
-console.log(products)
+//console.log(products)
 
-console.log(products[products.length - 1].id + 1)
+//console.log(products[products.length - 1].id + 1)
 
 const router = Router()
 
@@ -33,12 +33,12 @@ router.get('/:pid', async (req, res) =>{
     res.json({message: `product ${req.params.pid}`})
 })
 
-router.post('/', uploader.single('image') , async (req, res) =>{ //el uploader de multer sin con varios es .array y si es uno solo es .single, lo que va dentro de los parentesis es el nombre del atributo name que le pusimos a la etiqueta input de nuestro formulario html.
-    try {
+router.post('/', uploader.single('thumbnail') , async (req, res) =>{ //el uploader de multer sin con varios es .array y si es uno solo es .single, lo que va dentro de los parentesis es el nombre del atributo name que le pusimos a la etiqueta input de nuestro formulario html.
+    try {       
+        console.log(req.body)
         const { title, description, code, price, status, stock, category, thumbnail } = req.body
-    
         const productInfo = {
-            id: products[products.length - 1].id + 1 ,
+            id: (products[products.length - 1].id + 1) ,
             title,
             description,
             code,
@@ -46,16 +46,20 @@ router.post('/', uploader.single('image') , async (req, res) =>{ //el uploader d
             status,
             stock,
             category,
-            thumbnail
+            thumbnail: req.body.thumbnail
         }
     
         products.push(productInfo)
         
-
-        console.log(req.body)
-        res.json({message: `product: { title:"${req.body.title}", description:"${req.body.description}", price:${req.body.price} }`})
+        res.json({
+            message: 'producto creado',
+            productInfo
+        })
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener los productos.' })
+        res.status(err.status || 500).json({
+            message: err.message,
+            error: err
+          })
     }
 })
 

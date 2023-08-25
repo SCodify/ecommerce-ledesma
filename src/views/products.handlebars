@@ -1,7 +1,8 @@
 <h1>Test products</h1>
 
 <h3>Formulario de productos</h3>
-<form action="api/products" method="post">
+<!--<form action="/api/products" method="post">-->
+<form id="createForm">
     <label> 
         title:
         <input type="text" name="title"> 
@@ -11,28 +12,34 @@
         <input type="text" name="description">
     </label>
     <label>
+        code:
+        <input type="text" name="code">
+    </label>
+    <label>
         price:
         <input type="number" name="price">
     </label>
     <label>
-        thumbnail:
-        <input type="text" name="thumbnail">
-    </label>
-    <label>
-        code:
-        <input type="text" name="code">
+        status:
+        <input type="text" name="status">
     </label>
     <label>
         stock:
         <input type="number" name="stock">
     </label>
-
+    <label>
+        category:
+        <input type="text" name="category">
+    </label>
     <label>
         thumbnail:
-        <input type="file" name="image">
+        <input type="file" name="thumbnail">
     </label>
 
     <input type="submit">
 </form>
 
-<script src="/js/index.js"></script>
+<script src="/socket.io/socket.io.js"></script><!-- Paso 3 -->
+<script src="/js/products.js"></script>
+
+<!-- Paso 4 en public/js/index.js-->
