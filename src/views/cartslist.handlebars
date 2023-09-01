@@ -3,16 +3,17 @@
 <ul>
   {{#each carts as |cart|}}
     <li>
-      ID: {{cart.id}}
+      Cart id: {{cart.id}}
       {{#if cart.products.length}}
         <ul>
           {{#each cart.products as |product|}}
-            <li>Product ID: {{product.id}}</li>
+            <li>Product id: {{product.id}}</li>
             <li>Quantity: {{product.quantity}}</li>
           {{/each}}
         </ul>
       {{else}}
-        No products available.
+      <br>
+        (No products available).
       {{/if}}
     </li>
   {{/each}}

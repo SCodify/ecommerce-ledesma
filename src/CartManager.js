@@ -78,11 +78,11 @@ class CartManager {
         }
     }
   
-    async getCartById(pid) {
+    async getCartById(cid) {
         try {
             const contenido = await fs.promises.readFile(this.path, 'utf-8')
             const arrCarts = JSON.parse(contenido)
-            const cart = arrCarts.find(product => product.id == pid)
+            const cart = arrCarts.find(cart => cart.id == cid)
             if (!cart) {
               throw new Error('Not found')
             }
@@ -92,38 +92,13 @@ class CartManager {
         }
     }
 
-    async updateCart(idUpdate, obj) {
-        try {
-            let arrCartsEditado = []
-            const contenido = await fs.promises.readFile(this.path, 'utf-8')
-            const arrCarts = JSON.parse(contenido)
-            
-            arrCarts.forEach(cart => {
-              if(cart.id == idUpdate){
-                let cartMerge = {...cart, ...obj}
-                arrCartsEditado.push(cartMerge)
-              } else {
-                arrCartsEditado.push(cart)
-              }
-            })
-      
-            await fs.promises.unlink(this.path)
-      
-            this.carts = arrCartsEditado
-      
-            await fs.promises.writeFile(this.path, JSON.stringify(arrCartsEditado))
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     async deleteCart(idDelete) {
         try {
-            let arrCartctsFiltrado = []
+            let arrCartsFiltrado = []
             const contenido = await fs.promises.readFile(this.path, 'utf-8')
             const arrCartcts = JSON.parse(contenido)
             
-            arrCartctsFiltrado = arrCartcts.filter(cart => cart.id != idDelete) 
+            arrCartsFiltrado = arrCartcts.filter(cart => cart.id != idDelete) 
       
             await fs.promises.unlink(this.path)
       
