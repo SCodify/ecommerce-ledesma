@@ -1,10 +1,21 @@
 <h1>Carts</h1>
 
-{{#each carts}}
-    <div>
-        <p>id: {{this.id}}</p>
-        <p>productos: {{this.products}}</p>
-    </div>
-{{/each}}
+<ul>
+  {{#each carts as |cart|}}
+    <li>
+      ID: {{cart.id}}
+      {{#if cart.products.length}}
+        <ul>
+          {{#each cart.products as |product|}}
+            <li>Product ID: {{product.id}}</li>
+            <li>Quantity: {{product.quantity}}</li>
+          {{/each}}
+        </ul>
+      {{else}}
+        No products available.
+      {{/if}}
+    </li>
+  {{/each}}
+</ul>
 
-<script src="/js/index.js"></script> 
+<script src="/js/cartslist.js"></script> 

@@ -26,22 +26,42 @@ class CartManager {
         }
     } 
 
-    async addProduct(cid, pid) {
+    async addProduct(cid, obj) {
         try {
-            let arrCartsEditado = []
+            
+            console.log('obj :',obj)
+            
+
+            let productoExiste = false
 
             const contenido = await fs.promises.readFile(this.path, 'utf-8')
             const arrCarts = JSON.parse(contenido)
             
+            
+            arrCarts.forEach(cart => {
+                if(cart.id == cid) {
+                    if(cart.products.length == 0){
+                        cart.products.push({id: obj.id, quantity: 1})
+                    } else {
+                        cart.products.forEach(product =>{
+                            if(product.id == obj.id) {
+                                product.quantity ++
+                                productoExiste = true
+                            }
+                        })
+                        
+                        if(!productoExiste){
+                            cart.products.push({id: obj.id, quantity: 1})
+                        }
+                    }
+                }
+            })
+
+            this.carts = arrCarts
+            
             console.log('arrCarts :',arrCarts)
             
-            const cart = arrCarts.find(cart => cart.id == cid)
-
-            if(cart.products.product == pid){
-                cart.products.quantity ++
-            } else {
-                cart.products.push({ product: pid, quantity: 1})
-            }
+            await fs.promises.writeFile(this.path, JSON.stringify(arrCarts))
         } catch (error) {
             console.log(error);
         }

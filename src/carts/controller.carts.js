@@ -56,16 +56,18 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) =>{
     try {
         const { cid } = req.params
         const { pid } = req.params 
-        
-        console.log('cid :',cid)
-        
-        console.log('pid :',pid)
-        
-        await cartManager.addProduct(cid, pid)
+        const producto = await importarProducto(pid)
+        if(producto){
+            await cartManager.addProduct(cid, producto)
+            return res.json({
+                message: 'Se agregó producto al carrito',
+            })
+        } else {
+            return res.json({
+                message: 'El producto no existe',
+            })
+        }
                 
-        res.json({
-            message: 'Se agregó producto al carrito',
-        })
     } catch (err) {
         res.status(err.status || 500).json({
             message: err.message,

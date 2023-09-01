@@ -1,4 +1,17 @@
 body {
     background-color: lightgrey;
     color: crimson;
+    font-family: sans-serif;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    gap:25px;
+}
+
+ul ul {
+    display: flex;
+    flex-direction: column;
+    gap:10px;
 }
