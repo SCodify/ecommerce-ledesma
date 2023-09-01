@@ -24,7 +24,16 @@ const httpServer = app.listen(port, () => {
 const io = new Server(httpServer)// Paso 2 
 
 io.on('connection', (socket) => {// Paso 5
-    console.log("hola desde el socket del lado del servidor")
+    console.log("Hola desde el socket del lado del servidor, socket id: ", socket.id)
+
+    // socket.on('mesagge', (payload) => {// Paso 7: se prueba recibir datos del lado del cliente
+    //     console.log(payload, socket.id);
+    // })
+    
+    socket.broadcast.emit(// Paso 9
+        'broadcast',
+        `Un mensaje para todos, menos para ${socket.id}`    
+    )
 })
 
 //Paso 3 en views/products.handlebars

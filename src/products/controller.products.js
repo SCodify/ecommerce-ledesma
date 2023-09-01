@@ -1,61 +1,89 @@
 const { Router } = require('express')
-const products = require('../db/products')
+const productsRouter = Router()
 
-//const ProductManager = require('../ProductManager')
-//const productManager = new ProductManager("./miArchivo.txt");
+const ProductManager = require('../ProductManager')
+const productManager = new ProductManager("./products.txt")
 
 const uploader = require('../utils/multer') // Sirve para cargar archivos
 
-//console.log(products)
 
-//console.log(products[products.length - 1].id + 1)
+productsRouter.get('/', async (req, res) =>{
+    try {   
+        const products = await productManager.getProducts()
 
-const router = Router()
-
-router.get('/', async (req, res) =>{
-    // const { limit } = req.body
-    // res.json({message: products})
-    res.render('products.handlebars', { 
-        style: 'products' 
-    })
+        res.render('newproduct.handlebars', {
+            products,
+            style: 'newproducts'
+        })
+    } catch (err) {
+        res.status(err.status || 500).json({
+            message: err.message,
+            error: err
+        })
+    }
 })
 
-router.get('/realtimeproducts', async (req, res) =>{
-    // const { limit } = req.body
-    //res.json({message: products})
-    res.render('home.handlebars', {
-        products,
-        style: 'home'
-    })
+productsRouter.get('/realtimeproducts', async (req, res) =>{
+    try {   
+        // const { limit } = req.query
+        // if(limit) {
+        //     const productsLimit = await products.slice(0, limit)
+        //     return res.render('home.handlebars', { 
+        //         productsLimit,
+        //         style: 'home' })
+        // } 
+        
+        const products = await productManager.getProducts()
+        
+        res.render('productslist.handlebars', {
+            products,
+            style: 'productslist'
+        })
+    } catch (err) {
+        res.status(err.status || 500).json({
+            message: err.message,
+            error: err
+        })
+    }
 })
 
-router.get('/:pid', async (req, res) =>{
-    res.json({message: `product ${req.params.pid}`})
+productsRouter.get('/:pid', async (req, res) =>{
+    try {
+        const { pid } = req.params
+        const product = await productManager.getProductById(pid)
+        res.json({ product })
+    } catch (err) {
+        res.status(err.status || 500).json({
+            message: err.message,
+            error: err
+        })
+    }
 })
 
-router.post('/', uploader.single('thumbnail') , async (req, res) =>{ //el uploader de multer sin con varios es .array y si es uno solo es .single, lo que va dentro de los parentesis es el nombre del atributo name que le pusimos a la etiqueta input de nuestro formulario html.
+productsRouter.post('/', /*uploader.single('thumbnail'),*/ async (req, res) =>{ //el uploader de multer sin con varios es .array y si es uno solo es .single, lo que va dentro de los parentesis es el nombre del atributo name que le pusimos a la etiqueta input de nuestro formulario html.
     try {       
-        console.log(req.body)
-        const { title, description, code, price, status, stock, category, thumbnail } = req.body
-        const productInfo = {
-            id: (products[products.length - 1].id + 1) ,
+        const { title, description, code, price, status, stock, category/*, thumbnail*/ } = req.body
+        
+        await productManager.addProduct(
             title,
             description,
             code,
             price,
             status,
             stock,
-            category,
-            thumbnail: req.body.thumbnail
-        }
-    
-        products.push(productInfo)
+            category/*,
+            thumbnail*/
+        )
+
+        const products = await productManager.getProducts()
+        
+        const newProduct = products[products.length - 1]
         
         res.json({
             message: 'producto creado',
-            productInfo
+            newProduct
         })
-    } catch (error) {
+    } catch (err) {
         res.status(err.status || 500).json({
             message: err.message,
             error: err
@@ -63,13 +91,40 @@ router.post('/', uploader.single('thumbnail') , async (req, res) =>{ //el upload
     }
 })
 
-router.put('/:pdi', async (req, res) =>{
-    console.log(req.body)
-    res.json({message: `update product`})
+productsRouter.put('/:pid', async (req, res) =>{
+    try {
+        const { pid } = req.params
+        const newData = req.body
+        
+        const updateProcut = await productManager.updateProduct(pid, newData)
+        console.log(updateProcut);
+        res.json({
+            message: "Producto actualizado",
+            updateProcut
+        })
+    } catch (err) {
+        res.status(err.status || 500).json({
+            message: err.message,
+            error: err
+          })
+    }
 })
 
-router.delete('/:pid', async (req, res) =>{
-    res.json({message: `delete product ${req.params.pid}`})
+productsRouter.delete('/:pid', async (req, res) =>{
+    try {
+        const { pid } = req.params
+        
+        const product = await productManager.deleteProduct(pid)
+        res.json({
+            message: "Producto eliminado",
+            product
+        })
+    } catch (err) {
+        res.status(err.status || 500).json({
+            message: err.message,
+            error: err
+          })
+    }
 })
 
-module.exports = router
+module.exports = productsRouter

@@ -9,7 +9,7 @@ class ProductManager {
         this.path = ruta
     }
     
-    async addProduct(title, description, code, price, status, stock, category, thumbnail) {
+    async addProduct(title, description, code, price, status, stock, category/*, thumbnail*/) {
         try {
             this.productId ++
 
@@ -22,10 +22,10 @@ class ProductManager {
                 status,
                 stock,
                 category,
-                thumbnail
+                /*thumbnail*/
             }
             
-            if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
+            if (!title || !description || !code || !price || !stock || !category/* || !thumbnail*/) {
                 throw new Error('Todos los campos son obligatorios')
             }
             
@@ -52,11 +52,11 @@ class ProductManager {
         }
     }
   
-    async getProductById(id) {
+    async getProductById(pid) {
         try {
             const contenido = await fs.promises.readFile(this.path, 'utf-8')
             const arrProducts = JSON.parse(contenido)
-            const product = arrProducts.find(product => product.id === id)
+            const product = arrProducts.find(product => product.id == pid)
             if (!product) {
               throw new Error('Not found')
             }
